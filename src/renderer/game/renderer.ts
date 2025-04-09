@@ -1,4 +1,4 @@
-function init(): void {
+/* function init(): void {
   window.addEventListener('DOMContentLoaded', () => {
     doAThing()
   })
@@ -24,3 +24,4 @@ function replaceText(selector: string, text: string): void {
 }
 
 init()
+ */

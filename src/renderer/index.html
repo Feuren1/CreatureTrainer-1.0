@@ -5,23 +5,25 @@
     <title>Electron</title>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <!-- In your HTML file -->
-    <meta
-    http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; worker-src 'self' blob:;"
-    />
-
-
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="
+          default-src 'self';
+          script-src 'self' 'unsafe-inline' 'unsafe-eval';
+          style-src 'self' 'unsafe-inline';
+          img-src 'self' data: blob: file:;
+          font-src 'self';
+          connect-src 'self';
+          worker-src 'self' blob:;
+        "
+    /> -->
     <link href="./assets/main.css" type="text/css" rel="stylesheet" />
   </head>
 
   <body>
+    <script type="module" src="index.ts"></script>
     <div id="app">
-      <h1>Creature Trainer</h1>
-      <p>Welcome to the Creature Trainer!</p>
-      <p>Click the button below to start training your creatures.</p>
-      <button id="start-button">Start Training</button>
-
-    <script type="module" src="./src/renderer.ts"></script>
+      <!-- <script type="module" src="./src/renderer.ts"></script> -->
+    </div>
   </body>
-    <script type="module" src="./src/index.ts"></script>
 </html>
