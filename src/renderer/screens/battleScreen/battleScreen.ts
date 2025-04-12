@@ -4,6 +4,14 @@ import { Scene } from '../abstractions/Scene'
 export class BattleScreen implements Scene {
   public windowHeight: number | undefined
   public windowWidth: number | undefined
+
+
+  constructor() {
+    this.container.width = window.innerWidth
+    this.container.height = window.innerHeight
+    this.init()
+  }
+
   onResize(): void {
     throw new Error('Method not implemented.')
   }

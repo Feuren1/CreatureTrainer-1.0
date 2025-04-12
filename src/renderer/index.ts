@@ -1,8 +1,19 @@
 import '@pixi/unsafe-eval'
 import { Application } from 'pixi.js'
-import { SceneManager } from './screens/screenManager'
+import { SceneManager } from './screens/sceneManager'
 import { MainMenuScreen } from './screens/mainScreen/mainMenuScreen'
 import { Scene } from './screens/abstractions/Scene'
+import { BattleScreen } from './screens/battleScreen/battleScreen'
+
+interface ElectronAPI {
+  onWindowResize: (callback: (size: { width: number; height: number }) => void) => void
+}
+
+declare global {
+  interface Window {
+    electron: ElectronAPI
+  }
+}
 
 class AppState {
   private _showWelcomeMessage: boolean
@@ -18,11 +29,11 @@ class AppState {
   }
 
   set windowWidth(width: number) {
-    this._windowWidth = width;
+    this._windowWidth = width
   }
 
   set windowHeight(height: number) {
-    this._windowHeight = height;
+    this._windowHeight = height
   }
 
   get windowWidth(): number {
@@ -34,26 +45,14 @@ class AppState {
   }
 
   set showWelcomeMessage(value: boolean) {
-    console.log('Setter called with value:', value);
+    console.log('Setter called with value:', value)
     this._showWelcomeMessage = value
-    this.handleWelcomeMessage();
+    this.handleWelcomeMessage()
   }
 
   get showWelcomeMessage(): boolean {
     return this._showWelcomeMessage
   }
-
-  private onResize(): void {
-    this._windowWidth = window.innerWidth
-    this._windowHeight = window.innerHeight
-    /* this.notifyScenes() */
-  }
-
-  /* private notifyScenes(): void {
-    if (this.sceneManager) {
-      this.sceneManager.updateWindowSize(this._windowWidth, this._windowHeight)
-    }
-  } */
 
   handleWelcomeMessage(): void {
     const container = document.getElementById('app')
@@ -66,16 +65,14 @@ class AppState {
           <button id="start-button">Start Training</button>
       </div>`
     } else {
-      container.innerHTML = ''
+      container.innerHTML = '<button id="battle-start">Start the battle!</button>'
     }
   }
 }
-
 async function main(): Promise<void> {
-  
   const app: Application = new Application()
   const initScene: MainMenuScreen = new MainMenuScreen()
-  const appstate: AppState = new AppState(app, initScene);
+  const appstate: AppState = new AppState(app, initScene)
 
   await app.init({
     background: '1b1b1f',
@@ -85,12 +82,29 @@ async function main(): Promise<void> {
   })
 
   appstate.sceneManager.init()
-  appstate.handleWelcomeMessage();
+  appstate.handleWelcomeMessage()
+
+  if (appstate.showWelcomeMessage == false) {
+    const battleStartButton = document.getElementById('battle-start')
+    battleStartButton?.addEventListener('click', () => {
+      console.log('BUTTON CLICKED')
+      const battleScreen: BattleScreen = new BattleScreen()
+      appstate.sceneManager.switchScene(battleScreen)
+    })
+  }
 
   const startButton = document.getElementById('start-button')
   startButton?.addEventListener('click', () => {
     appstate.showWelcomeMessage = false
     appstate.sceneManager.show()
+  })
+
+  // Listen for window resize events from the main process
+  window.electron.onWindowResize((size) => {
+    console.log(`Renderer: Window resized to ${size.width}x${size.height}`)
+    appstate.windowWidth = size.width
+    appstate.windowHeight = size.height
+    appstate.sceneManager.resize(size.width, size.height)
   })
 }
 

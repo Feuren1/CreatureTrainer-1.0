@@ -9,11 +9,11 @@ export class SceneManager {
 
   constructor(private app: Application, initScene: Scene) {
     this.initScene = initScene;
+    this.currentScene = initScene;
   }
 
   init(): void {
     this.app.stage.addChild(this.initScene.container);
-    
   }
 
   show(): void {
@@ -21,6 +21,7 @@ export class SceneManager {
   }
 
   switchScene(newScene: Scene): void {
+    console.log("switchingScene")
     if (this.currentScene) {
       this.currentScene.destroy()
     }
@@ -29,6 +30,9 @@ export class SceneManager {
     this.currentScene.init()
   }
 
-  
+  resize(width:number,height:number): void {
+    this.currentScene?.onResize(width,height);
+  }
+
 }
 

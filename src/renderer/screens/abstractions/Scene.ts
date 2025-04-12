@@ -8,5 +8,5 @@ export abstract class Scene {
   abstract init(): void
   abstract update(delta: number): void
   abstract destroy(): void
-  abstract onResize(): void
+  abstract onResize(width:number,height:number): void
 }
